@@ -1,0 +1,8 @@
+basic, for length threshold 300
+table:  {'text': {'text': 316, 'drawing': 425}, 'drawing': {'text': 331, 'drawing': 943}}
+
+best, for length threshold 300 & speed threshold 0.022
+ {'text': {'text': 321, 'drawing': 420}, 'drawing': {'text': 330, 'drawing': 944}}
+
+best, for length threshold 300 & speed threshold 0.05 & curvature 0.042
+ {'text': {'text': 322, 'drawing': 419}, 'drawing': {'text': 292, 'drawing': 982}}

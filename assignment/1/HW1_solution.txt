@@ -1,0 +1,293 @@
+# Sara Owsley Sood
+# Programming Assignment 1 
+
+# twoToTheN(n) in log(n) time
+
+def twoToTheN(n):
+    """Calculates 2^n in log(n) time."""
+    #base cases
+    if n == 0:
+        return 1
+    elif n == 1:
+        return 2
+    else:     
+        halfN = n/2 #integer division - rounds down
+        #calculate the result of a smaller problem
+        #  this step is very important as you need to save this val in a 
+        #  variable instead of computing it twice
+        partial = twoToTheN(halfN)
+        #if even, multiply the partial answer by itself
+        if n % 2 == 0:
+            return partial*partial
+        #otherwise, mult an extra 2
+        else:
+            return 2*partial*partial
+
+print "\nProblem 1: \n"
+        
+print "twoToTheN test case #1: " + str(twoToTheN(3) == 8)
+print "twoToTheN test case #2: " + str(twoToTheN(0) == 1)
+print "twoToTheN test case #3: " + str(twoToTheN(10) == 1024)
+    
+# mean(L) and median(L)
+
+def mean(L):
+    """Calculates the mean of a list of numbers."""
+    sum = 0
+    ct = len(L)
+    for x in L:
+        sum = sum + x
+    average = float(sum)/float(ct)
+    return average
+
+def median(L):
+    """Calculates the median of a list of numbers."""
+    L.sort()
+    #print "L is: " + str(L)
+    ct = len(L)
+    #print "ct is: " + str(ct)
+    median = 0
+    #if the list has odd length, return the middle element
+    if ct % 2 == 1:
+        #print "odd"
+        median = L[ct / 2]
+    #otherwise, get the mean of the two central elements
+    else:
+        #print "even"
+        mid = L[(ct/2)-1:(ct/2) + 1]
+        #print "mid is: " + str(mid)
+        median = float(mean(mid))
+    return median
+
+print "\nProblem 2: \n"
+
+x = [5,1,2,3,1] 
+y = [5,1,2,3,1,4]
+print "mean test case #1: " + str(mean(x) == float(12)/float(5))
+print "mean test case #2: " + str(mean(y) == float(16)/float(6))
+print "median test case #1: " + str(median(x) == 2)
+print "median test case #2: " + str(median(y) == 2.5)
+
+# BFS and DFS - tree search
+
+class Stack:
+    """Provides a rudimentary stack class."""
+
+    def __init__(self):
+        """The constructor simply creates an internal list."""
+	self.theStack = []
+
+    def __str__(self):
+        """Returns a string represenation of the stack."""
+        return "The stack contains: " + str(self.theStack)
+
+    def isEmpty(self):
+        """The test for empty compares the internal list
+        with the empty list."""
+	return self.theStack == []
+
+    def push(self, elt):
+        """To insert an element, simply append it to the
+        internal list."""
+        self.theStack = [elt] + self.theStack
+
+    def pop(self):
+        """To remove an element, take it out of the list and
+        return it."""
+        el = self.theStack[0]
+        self.theStack = self.theStack[1:]
+        return el
+
+class Queue:
+    """Provides a rudimentary queue class."""
+
+    def __init__(self):
+        """The constructor simply creates an internal list."""
+	self.theQueue = []
+
+    def __str__(self):
+        """Returns a string represenation of the queue."""
+        return "The queue contains: " + str(self.theQueue)
+
+    def isEmpty(self):
+        """The test for empty compares the internal list
+        with the empty list."""
+	return self.theQueue == []
+
+    def push(self, elt):
+        """To insert an element, simply append it to the
+        internal list."""
+	self.theQueue.append(elt)
+
+    def pop(self):
+        """To remove an element, take it out of the list and
+        return it."""
+	elt = self.theQueue[0]
+        self.theQueue = self.theQueue[1:]
+	return elt
+
+        
+def bfs(tree, el):
+    #open will contain the known yet unexpanded nodes
+    open = Queue()
+    #initial push in the 'whole tree' but really just pushing in the 
+    #   root element
+    open.push(tree)
+
+    #while there are still nodes to expand
+    while not open.isEmpty():
+        #grab one
+        cur = open.pop()
+        #in order to prove that it is 'bfs', print the el being examined
+        print str(cur[0]) + " "
+        #if it is the element that we seek
+        if cur[0] == el:
+            return True
+        else:
+            #push the children of the current element into open
+            for x in cur[1:]:
+                open.push(x)
+    #if we reach this point, then the element was not found
+    return False
+
+def dfs(tree, el):
+    #open will contain the known yet unexpanded nodes
+    open = Stack()
+    #initial push in the 'whole tree' but really just pushing in the 
+    #   root element
+    open.push(tree)
+
+    #while there are still nodes to expand
+    while not open.isEmpty():
+        #grab one
+        cur = open.pop()
+        #in order to prove that it is 'dfs', print the el being examined
+        print str(cur[0]) + " "
+        #if it is the element that we seek
+        if cur[0] == el:
+            return True
+        else:
+            #push the children of the current element into open
+            for x in cur[1:]:
+                open.push(x)
+    #if we reach this point, then the element was not found
+    return False
+
+
+print "\nProblem 3: \n"
+
+myTree = [4, [10, [33], [2]], [3], [14, [12]], [1]]
+print "bfs test case #1: " + str(bfs(myTree, 1) == True)
+print "bfs test case #2: " + str(bfs(myTree, 7) == False)
+print "dfs test case #1: " + str(dfs(myTree, 1) == True)
+print "dfs test case #2: " + str(dfs(myTree, 7) == False)
+
+
+#Part 2 #2
+
+class TTTBoard():
+    def __init__(self):
+        """Initiailizes the TTT board as a list of '*' to indicate blank spaces."""
+        self.rows = ['*', '*', '*', '*', '*', '*', '*', '*', '*']
+        
+    def __str__(self):
+        """Returns a string representation of the board in a 3x3 format."""
+        s = ""
+        for x in [0,3,6]:
+            s += self.rows[x+0] + " " + self.rows[x+1] + " " + self.rows[x+2] + "\n"
+        return s             
+
+    def makeMove(self, player, pos):
+        """If legal, places a player in a pos and returns True.  Returns False if illegal."""
+        #see if pos it on board first
+        if pos > 8 or pos < 0:
+            return False
+        #if the space is free
+        if self.rows[pos] == '*':
+            #make the move
+            self.rows[pos] = player
+            return True
+        else:
+            #it is already taken
+            return False
+
+    def hasWon(self, player):
+        """Returns True if player has won, false otherwise."""
+        #check each row
+        for x in [0,3,6]:
+            if self.rows[x+0] == player and \
+               self.rows[x+1] == player and \
+               self.rows[x+2] == player:
+               return True
+        #check each col
+        for i in [0,1,2]:
+            if self.rows[0+i] == player and \
+               self.rows[3+i] == player and \
+               self.rows[6+i] == player:
+               return True
+
+        #check down diag
+        if self.rows[0] == player and \
+           self.rows[4] == player and \
+           self.rows[8] == player:
+           return True
+
+        #check up diag
+        if self.rows[2] == player and \
+           self.rows[4] == player and \
+           self.rows[6] == player:
+           return True
+
+        #if didn't win on any of the above 4, then didn't win
+        return False
+
+    def gameOver(self):
+        """Returns True if someone has won or if the board is full, False otherwise."""
+        over = False
+        full = True
+        for x in self.rows:
+            if x == '*':
+                full = False
+        if full or self.hasWon('X') or self.hasWon('O'):
+            over = True
+        return over
+
+    def clear():
+        """Clears the board to reset the game."""
+        self.rows = ['*', '*', '*', '*', '*', '*', '*', '*', '*']        
+
+
+def playTicTacToe():
+    """uses our TTTBoard class to play tic tac toe with two players"""
+    myB = TTTBoard()
+    players = ["X", "O"]
+    playerTurn = 0
+    while not myB.gameOver():
+        print myB
+        print "Player " + players[playerTurn] + " what is your move?"
+        iMove = int(raw_input("?"))
+        myB.makeMove(players[playerTurn], iMove)
+        if playerTurn == 0:
+            playerTurn = 1
+        else:
+            playerTurn = 0
+
+    print "game over"
+    print myB
+    for i in [0,1]:
+        if myB.hasWon(players[i]):
+            print players[i] + " wins!"
+
+print "\nProblem 4: \n"
+            
+myB = TTTBoard()
+print myB
+myB.makeMove("X", 8)
+myB.makeMove("O", 7)
+myB.makeMove("X", 5)
+myB.makeMove("O", 6)
+myB.makeMove("X", 2)
+print myB
+
+print "tic tac toe test case #1: " + str(myB.hasWon("X") == True)
+print "tic tac toe test case #2: " + str(myB.hasWon("O") == False)

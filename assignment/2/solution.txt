@@ -1,0 +1,320 @@
+# File: Player.py
+# Defines a simple artificially intelligent player agent
+# You will define the alpha-beta pruning search algorithm
+# You will also define the score function in the MancalaPlayer class,
+# a subclass of the Player class.
+
+
+from random import *
+from copy import *
+from MancalaBoard import *
+
+# a constant
+INFINITY = 1.0e400
+
+class Player:
+    """ A basic AI (or human) player """
+    HUMAN = 0
+    RANDOM = 1
+    MINIMAX = 2
+    ABPRUNE = 3
+    CUSTOM = 4
+    
+    def __init__(self, playerNum, playerType, ply=9):    
+        self.num = playerNum
+        self.opp = 2 - playerNum + 1
+        self.type = playerType
+        self.ply = ply
+
+    def __repr__(self):
+        return str(self.num)
+        
+    def minimaxMove (self, board, ply):
+        """ Choose the best minimax move.  Returns (score, move). """
+        # Set up an opposing player to use.
+        self.oppPlayer = Player(self.opp, self.type, self.ply)
+        # The rest is different from maxValue only in that it keeps track
+        # of which move produced the max value and returns that move.
+        if ply == 0:
+        	# No ply, so just choose first legal move
+            return (self.score(board), board.legalMoves(self)[0])
+        if board.gameOver():
+            # Game is over, no legal moves
+            return (self.score(board), -1)
+        score = -INFINITY
+        move = -1
+        for m in board.legalMoves(self):
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            nextBoard.makeMove(self, m)
+            s = self.minValue(nextBoard, ply-1)
+            if s > score:
+                move = m
+                score = s
+        return (score, move)
+
+    def maxValue (self, board, ply):
+        """ Find the minimax value for the next move for this player
+            at a given board configuration. """
+        if ply == 0 or board.gameOver():
+        	# No further recursion, so return current board score
+            return self.score(board)
+        score = -INFINITY
+        for m in board.legalMoves(self):
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            nextBoard.makeMove(self, m)
+            score = max(score, self.minValue(nextBoard, ply-1))
+        return score
+    
+    def minValue (self, board, ply):
+        """ Find the minimax value for the next move for the opposing player
+            at a given board configuration. """
+        if ply == 0 or board.gameOver():
+        	# No further recursion, so return current board score
+            return self.score(board)
+        score = INFINITY
+        for m in board.legalMoves(self.oppPlayer):
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            nextBoard.makeMove(self.oppPlayer, m)
+            score = min(score, self.maxValue(nextBoard, ply-1))
+        return score
+
+
+    # The default player defines a very simple score function
+    # You will write the score function in the MancalaPlayer below
+    # to improve on this function.
+    def score(self, board):
+        """ Returns the score for this player given the state of the board """
+        if board.hasWon(self.num):
+            return 100.0
+        elif board.hasWon(self.opp):
+            return 0.0
+        else:
+            return 50.0
+
+    # You should not modify anything before this point.
+    # The code you will add to this file appears below this line.
+
+    # You will write this function (and any helpers you need)
+    # You should write the function here in its simplest form:
+    #   1. Use ply to determine when to stop (when ply == 0)
+    #   2. Search the moves in the order they are returned from the board's
+    #       legalMoves function.
+    # However, for your custom player, you may copy this function
+    # and modify it so that it uses a different termination condition
+    # and/or a different move search order.
+
+    def alphaBetaMove( self, board, ply ):
+        """ Choose a move with alpha beta pruning """
+        # Set up an opposing player to use.
+        self.oppPlayer = Player(self.opp, self.type, self.ply)
+        # The rest is different from maxValueAB only in that it keeps track
+        # of which move produced the max value and returns that move.
+        if ply == 0:
+        	# No ply, so just choose first legal move
+            return (self.score(board), board.legalMoves(self)[0])
+        if board.gameOver():
+            # Game is over, no legal moves
+            return (self.score(board), -1)
+        alpha = -INFINITY
+        beta  =  INFINITY
+        score = -INFINITY
+        move = -1
+        for m in board.legalMoves(self):
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            nextBoard.makeMove(self, m)
+            s = self.minValueAB(nextBoard, ply-1, alpha, beta)
+            if s > score:
+                move = m
+                score = s
+            alpha = max(alpha, score)
+        return (score, move)
+                
+    def maxValueAB (self, board, ply, alpha, beta):
+        """ Find the minimax value for the next move for this player
+            at a given board configuration. """
+        if ply == 0 or board.gameOver():
+        	# No further recursion, so return current board score
+            return self.score(board)
+        score = -INFINITY
+        for m in board.legalMoves(self):
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            nextBoard.makeMove(self, m)
+            score = max(score, self.minValueAB(nextBoard, ply-1, alpha, beta))
+            if (score >= beta):
+            	return score
+            alpha = max(alpha, score)
+        return score
+    
+    def minValueAB (self, board, ply, alpha, beta):
+        """ Find the minimax value for the next move for the opposing player
+            at a given board configuration. """
+        if ply == 0 or board.gameOver():
+        	# No further recursion, so return current board score
+            return self.score(board)
+        score = INFINITY
+        for m in board.legalMoves(self.oppPlayer):
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            nextBoard.makeMove(self.oppPlayer, m)
+            score = min(score, self.maxValueAB(nextBoard, ply-1, alpha, beta))
+            if (score <= alpha):
+            	return score
+            beta = min(beta, score)
+        return score
+
+    def chooseMove( self, board ):
+        """ Returns the next move that this player wants to make """
+        if self.type == self.HUMAN:
+            move = input("Please enter your move:")
+            while not board.legalMove(self, move):
+                print move, "is not valid"
+                move = input( "Please enter your move" )
+            return move
+        elif self.type == self.RANDOM:
+            move = choice(board.legalMoves(self))
+            print str(self.num) + " chose move", move, "with value", val
+            return move
+        elif self.type == self.MINIMAX:
+            val, move = self.minimaxMove(board, self.ply )
+            print str(self.num) + " chose move", move, " with value", val
+            return move
+        elif self.type == self.ABPRUNE:
+            val, move = self.alphaBetaMove(board, self.ply)
+            print str(self.num) + " chose move", move, " with value", val
+            return move
+        elif self.type == self.CUSTOM:
+            # TODO: Implement a custom player
+            # You should fill this in with a call to your best move choosing
+            # function.  You may use whatever search algorithm and scoring
+            # algorithm you like.  Remember that your player must make
+            # each move in about 10 seconds or less.
+            val, move = self.customMove(board, self.ply)
+            print str(self.num) + " chose move", move, " with value", val
+            return move
+        else:
+            print "Unknown player type"
+            return -1
+
+	# Custom move functions
+	# Implements alpha-beta pruning, but with knowledge that sometimes a player
+	# can have two or more moves in a row.
+
+    def customMove( self, board, ply ):
+        """ Choose a move with alpha beta pruning """
+        # Set up an opposing player to use.
+        self.oppPlayer = Player(self.opp, self.type, self.ply)
+        # The rest is different from maxValueCustom only in that it keeps track
+        # of which move produced the max value and returns that move.
+        if board.gameOver():
+            # Game is over, no legal moves
+            return (self.score(board), -1)
+        moves = board.legalMoves(self)
+        if ply == 0:
+        	# No ply, so just choose first legal move
+            return (self.score(board), moves[0])
+        alpha = -48.0
+        beta  =  48.0
+        score = -INFINITY
+        move = -1
+        for m in moves:
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            if nextBoard.makeMove(self, m):
+                s = self.maxValueCustom(nextBoard, ply-1, alpha, beta)
+            else:
+                s = self.minValueCustom(nextBoard, ply-1, alpha, beta)
+            if s > score:
+                move = m
+                score = s
+            alpha = max(alpha, score)
+        return (score, move)
+                
+    def maxValueCustom (self, board, ply, alpha, beta):
+        """ Find the minimax value for the next move for this player
+            at a given board configuration. """
+        if ply == 0 or board.gameOver():
+        	# No further recursion, so return current board score
+            return self.score(board)
+        score = -INFINITY
+        moves = board.legalMoves(self)
+        for m in moves:
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            if nextBoard.makeMove(self, m):
+                score = max(score, self.maxValueCustom(nextBoard, ply-1, alpha, beta))
+            else:
+                score = max(score, self.minValueCustom(nextBoard, ply-1, alpha, beta))
+            if (score >= beta):
+            	return score
+            alpha = max(alpha, score)
+        return score
+    
+    def minValueCustom (self, board, ply, alpha, beta):
+        """ Find the minimax value for the next move for the opposing player
+            at a given board configuration. """
+        if ply == 0 or board.gameOver():
+        	# No further recursion, so return current board score
+            return self.score(board)
+        score = INFINITY
+        moves = board.legalMoves(self.oppPlayer)
+        for m in moves:
+            # Copy the board so that we don't ruin it
+            nextBoard = deepcopy(board)
+            if nextBoard.makeMove(self.oppPlayer, m):
+                score = min(score, self.minValueCustom(nextBoard, ply-1, alpha, beta))
+            else:
+                score = min(score, self.maxValueCustom(nextBoard, ply-1, alpha, beta))
+            if (score <= alpha):
+            	return score
+            beta = min(beta, score)
+        return score
+
+# Note, you should change the name of this player to be a custom name
+# that identifies you or your team.
+
+class SomePlayer(Player):
+	""" Defines a player that knows how to evaluate a Mancala gameboard
+	    intelligently """
+
+	NWEIGHTS = 3
+
+	def __init__(self, playerNum, playerType, ply=0,
+	             weights=[1.0, 0.8, 0.6]):
+		Player.__init__(self, playerNum, playerType, ply)
+		self.weights = copy(weights)
+		self.fitness = 0.0
+	
+	def __repr__(self):
+		return str(self.num) + " [" + ", ".join(["%.4f" % w
+		                                        for w in self.weights]) + "]"
+
+	def score(self, board):
+		""" Evaluate the Mancala board for this player """
+		# Look in the board state
+		myScoreCup  = board.scoreCups[self.num - 1]
+		oppScoreCup = board.scoreCups[self.opp - 1]
+		if self.num == 1:
+			myCups  = board.P1Cups
+			oppCups = board.P2Cups
+		else:
+			myCups  = board.P2Cups
+			oppCups = board.P1Cups
+		# Calculate the factors
+		scoreScoreCups = myScoreCup - oppScoreCup
+		scoreOwnCups   = 0
+		scoreEmptyCups = 0
+		for i in range(board.NCUPS):
+			scoreOwnCups += myCups[i] - oppCups[i]
+			if myCups[i] == 0:
+				scoreEmptyCups += oppCups[(board.NCUPS - 1) - i]
+			if oppCups[i] == 0:
+				scoreEmptyCups -= myCups[(board.NCUPS - 1) - i]
+		# Calculate the total score
+		return (self.weights[0] * scoreScoreCups +
+		        self.weights[1] * scoreOwnCups +
+		        self.weights[2] * scoreEmptyCups)

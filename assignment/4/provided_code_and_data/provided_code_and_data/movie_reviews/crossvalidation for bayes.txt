@@ -1,0 +1,23 @@
+for bayes (single_gram):
+
+average precision:  0.991950463471
+average recall:  0.650314178101
+average fvalue:  0.785494420137
+
+for bayesbest (single_gram + bigrams):
+
+average precision:  0.996570781745
+average recall:  0.306478810831
+average fvalue:  0.46856553716
+
+for bayesbest (single_gram + stem):
+
+average precision:  0.9901542840
+average recall:  0.727979025658
+average fvalue:  0.838981323203
+
+for bayesbest (stem):
+
+average precision:  0.988140911671
+average recall:  0.740209426801
+average fvalue:  0.846353139962

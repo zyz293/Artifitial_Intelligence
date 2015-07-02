@@ -1,0 +1,128 @@
+dhcp-10-101-53-14:1 sarasood$ python
+Python 2.7.9 (v2.7.9:648dcafa7e5f, Dec 10 2014, 10:10:46) 
+[GCC 4.2.1 (Apple Inc. build 5666) (dot 3)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> x = 5
+>>> y = 10
+>>> x + y
+15
+>>> x = 'hi there'
+>>> x = "hi there"
+>>> x + y
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: cannot concatenate 'str' and 'int' objects
+>>> x + str(y)
+'hi there10'
+>>> x
+'hi there'
+>>> x[0]
+'h'
+>>> x[0:4]
+'hi t'
+>>> myL = [2]*5
+>>> myL
+[2, 2, 2, 2, 2]
+>>> myL[0]
+2
+>>> myL[2] = 5
+>>> myL
+[2, 2, 5, 2, 2]
+>>> x 
+'hi there'
+>>> x[2]
+' '
+>>> x[3]
+'t'
+>>> x[3] = 'r'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'str' object does not support item assignment
+>>> execfile("example1.py")
+>>> 
+KeyboardInterrupt
+>>> ^D
+dhcp-10-101-53-14:1 sarasood$ ls
+Classes.doc			example1.py
+DreamBuzzFinal.mov		example2.py
+DreamBuzzFinal.wmv		example3.py
+dhcp-10-101-53-14:1 sarasood$ python
+Python 2.7.9 (v2.7.9:648dcafa7e5f, Dec 10 2014, 10:10:46) 
+[GCC 4.2.1 (Apple Inc. build 5666) (dot 3)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> execfile("example1.py")
+>>> y = [1,2,3,4]
+>>> listSearch(y, 5)
+False
+>>> listSearch(y, 1)
+True
+>>> map(add5, y)
+[6, 7, 8, 9]
+>>> execfile("example2.py")
+Change Counter
+
+Please enter the count of each coin type.
+Quarters: 3
+Dimes: 2
+Nickels: 1
+Pennies: 0
+
+The total value of your change is 1.0
+>>> execfile("example2.py")
+Change Counter
+
+Please enter the count of each coin type.
+Quarters: w
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "example2.py", line 18, in <module>
+    change()
+  File "example2.py", line 10, in change
+    quarters = int(raw_input("Quarters: "))
+ValueError: invalid literal for int() with base 10: 'w'
+>>> execfile("example2.py")
+Change Counter
+
+Please enter the count of each coin type.
+Quarters: 3
+Dimes: 3
+Nickels: 3
+Pennies: 3
+
+The total value of your change is 1.23
+>>> execfile("example3.py")
+A yellow polygon with 4 edges of length 2
+A yellow polygon with 4 edges of length 2
+A orange polygon with 4 edges of length 2.82842712475
+A yellow polygon with 4 edges of length 2
+A yellow polygon with 4 edges of length 20
+This is a box of 4 polygons.
+This box contains:
+A red polygon with 5 edges of length 1
+A blue polygon with 3 edges of length 3
+A yellow polygon with 4 edges of length 20
+A orange polygon with 4 edges of length 2.82842712475
+>>> pentagon = polygon(5)
+>>> red_pentagon = polygon(5, "red")
+>>> big_pentagon = polygon(5, length=100)
+>>> print red_pentagon
+A red polygon with 5 edges of length 1
+>>> big_pentagon = polygon(5,, 100)
+  File "<stdin>", line 1
+    big_pentagon = polygon(5,, 100)
+                             ^
+SyntaxError: invalid syntax
+>>> red_pentagon.paint("purple")
+>>> print red_pentagon
+A purple polygon with 5 edges of length 1
+>>> help(listSearch)
+
+>>> dir(str)
+['__add__', '__class__', '__contains__', '__delattr__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__getnewargs__', '__getslice__', '__gt__', '__hash__', '__init__', '__le__', '__len__', '__lt__', '__mod__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__rmod__', '__rmul__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '_formatter_field_name_split', '_formatter_parser', 'capitalize', 'center', 'count', 'decode', 'encode', 'endswith', 'expandtabs', 'find', 'format', 'index', 'isalnum', 'isalpha', 'isdigit', 'islower', 'isspace', 'istitle', 'isupper', 'join', 'ljust', 'lower', 'lstrip', 'partition', 'replace', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate', 'upper', 'zfill']
+>>> dir(dict)
+['__class__', '__cmp__', '__contains__', '__delattr__', '__delitem__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__init__', '__iter__', '__le__', '__len__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'clear', 'copy', 'fromkeys', 'get', 'has_key', 'items', 'iteritems', 'iterkeys', 'itervalues', 'keys', 'pop', 'popitem', 'setdefault', 'update', 'values', 'viewitems', 'viewkeys', 'viewvalues']
+>>> dir(float)
+['__abs__', '__add__', '__class__', '__coerce__', '__delattr__', '__div__', '__divmod__', '__doc__', '__eq__', '__float__', '__floordiv__', '__format__', '__ge__', '__getattribute__', '__getformat__', '__getnewargs__', '__gt__', '__hash__', '__init__', '__int__', '__le__', '__long__', '__lt__', '__mod__', '__mul__', '__ne__', '__neg__', '__new__', '__nonzero__', '__pos__', '__pow__', '__radd__', '__rdiv__', '__rdivmod__', '__reduce__', '__reduce_ex__', '__repr__', '__rfloordiv__', '__rmod__', '__rmul__', '__rpow__', '__rsub__', '__rtruediv__', '__setattr__', '__setformat__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__truediv__', '__trunc__', 'as_integer_ratio', 'conjugate', 'fromhex', 'hex', 'imag', 'is_integer', 'real']
+>>> dir(polygon)
+['__doc__', '__init__', '__module__', '__str__', 'area', 'multArea', 'paint']
+>>> 

@@ -1,0 +1,25 @@
+A patient takes a lab test and the result comes back positive. The test has a false 
+negative rate of 2% and false positive rate of 2%. Furthermore, 0.5% of the entire 
+population have this cancer.
+
+What is the probability of cancer if we know the test result is positive?
+
+
+P(cancer|testpostive) = P(cancer n testpositive) / P(testpositive)
+
+Now imagine that 10,000 tests for cancer are administered. Of these, how many are 
+positive? 
+
+On the average, 50 of these 10,000 people (.5 percent of 10,000) will have cancer, 
+and so, since 98 percent of them will test positive, we will have 49 positive tests. 
+
+Of the 9,950 cancerless people, 2 percent of them will test positive, for a total of 
+199 positive tests (.02 x 9,950 = 199). 
+
+Thus, of the total 248 positive tests (199 + 49 = 248), most (199) are false 
+positives, and so the conditional probability of having cancer given that one tests 
+positive is only 49/248, or about 20 percent! (This relatively low percentage is to 
+be contrasted with the conditional probability that one tests positive, given that 
+one has cancer, which by assumption is 98 percent.)
+
+
